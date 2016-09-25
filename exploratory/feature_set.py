@@ -58,9 +58,9 @@ def assert_feature_set(set_a, set_b):
             assert len(set_a[i][j]) == len(set_b[i][j])
 
 
-numeric_datafile = 'data/test_numeric.csv'
-date_datafile = 'data/train_date.csv'
-categorical_datafile = 'data/train_categorical.csv'
+numeric_datafile = 'input/test_numeric.csv'
+date_datafile = 'input/train_date.csv'
+categorical_datafile = 'input/train_categorical.csv'
 
 date_df = read_csv_to_dataframe(date_datafile, fillna=False)
 date_headers = list(date_df.columns.values)
