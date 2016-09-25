@@ -3,7 +3,7 @@ import pandas as pd
 
 
 def read_csv_to_dataframe(filename, describe=False, fillna=True):
-    df = pd.read_csv(filename)
+    df = pd.read_csv(filename, index_col=0, dtype=np.float32)
 
     if describe:
         df.describe()
