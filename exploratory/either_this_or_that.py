@@ -15,7 +15,7 @@ def read_csv_to_dataframe(filename, describe=False, fillna=True):
 
     return df
 
-numeric_datafile = 'input/test_numeric.csv'
+numeric_datafile = 'input/train_numeric.csv'
 numeric_df = read_csv_to_dataframe(numeric_datafile, fillna=False)
 numeric_headers = list(numeric_df.columns.values)
 

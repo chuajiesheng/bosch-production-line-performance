@@ -7,7 +7,6 @@ from xgboost import XGBClassifier
 from sklearn.metrics import matthews_corrcoef, roc_auc_score
 from sklearn.cross_validation import cross_val_score, StratifiedKFold
 import matplotlib.pyplot as plt
-import seaborn as sns
 
 # I'm limited by RAM here and taking the first N rows is likely to be
 # a bad idea for the date data since it is ordered.
