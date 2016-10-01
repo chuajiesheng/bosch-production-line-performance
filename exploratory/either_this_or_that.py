@@ -11,7 +11,7 @@ def read_csv_to_dataframe(filename, describe=False, fillna=True):
         df.describe()
 
     if fillna:
-        df.fillna(0, inplace=True)
+        df.fillna(-1, inplace=True)
 
     return df
 
@@ -48,7 +48,7 @@ def check_either_this_or_that(features):
     df_unique.sort(columns=df_unique_headers, inplace=True)
     fig = plt.figure()
     ax = fig.add_subplot(111)
-    ax.imshow(df_unique, aspect='auto', cmap=plt.cm.gray, interpolation='nearest')
+    ax.imshow(df_unique, aspect='auto', cmap=plt.get_cmap('bwr'), interpolation='nearest')
     plt.show()  # plot the 1/0 map of the production line
     print ('# Finding column which are either this or that.')
     for current_column, next_column in list(zip(df_unique_headers, df_unique_headers[1:])):
