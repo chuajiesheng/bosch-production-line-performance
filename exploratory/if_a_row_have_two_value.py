@@ -74,7 +74,7 @@ del response_df
 
 n_datafile = 'input/train_numeric.csv'
 print('dumping from: {}'.format(n_datafile))
-n_df = df = pd.read_csv(n_datafile, index_col=0, usecols=list(range(969)), dtype=np.float32)
+n_df = df = pd.read_csv(n_datafile, index_col=0, dtype=np.float32)
 for k in file_id_dict.keys():
     print('dumping: {}'.format(file_id_dict[k]))
     output_to_csv(k, n_df.loc[file_id_dict[k]])
