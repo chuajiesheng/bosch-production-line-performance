@@ -12,7 +12,7 @@ def to_md5(s):
 
 
 def output_to_csv(k, rows):
-    output_filename = 'output/{}.csv'.format(k)
+    output_filename = 'output/two_values/{}.csv'.format(k)
     rows.to_csv(output_filename, mode='a')
     with open(output_filename, 'a') as f:
         f.write('\n')
