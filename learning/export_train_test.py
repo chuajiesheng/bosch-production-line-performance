@@ -18,8 +18,8 @@ def export_all(hashes):
         ids = items_with_response[h]
         rows = n_df.loc[ids].dropna(axis=1)
         export_filename = 'output/train_test/{}-{}.csv'.format('train_numeric', h)
-        print('exporting to: {}'.format(export_filename))
         rows.to_csv(export_filename)
+        print('.', end='', flush = True)
     del n_df
 
     d_df = pd.read_csv(filename.train_date_file, index_col=0, dtype=np.float32)
@@ -27,8 +27,8 @@ def export_all(hashes):
         ids = items_with_response[h]
         rows = d_df.loc[ids].dropna(axis=1)
         export_filename = 'output/train_test/{}-{}.csv'.format('train_date', h)
-        print('exporting to: {}'.format(export_filename))
         rows.to_csv(export_filename)
+        print('.', end='', flush=True)
     del d_df
 
     c_df = pd.read_csv(filename.train_categorical_file, index_col=0, dtype=str)
@@ -36,17 +36,17 @@ def export_all(hashes):
         ids = items_with_response[h]
         rows = c_df.loc[ids].dropna(axis=1)
         export_filename = 'output/train_test/{}-{}.csv'.format('train_categorical', h)
-        print('exporting to: {}'.format(export_filename))
         rows.to_csv(export_filename)
-    del d_df
+        print('.', end='', flush=True)
+    del c_df
 
     n_df = pd.read_csv(filename.test_numeric_file, index_col=0, dtype=np.float32)
     for h in hashes:
         ids = test_items_need_training[h]
         rows = n_df.loc[ids].dropna(axis=1)
         export_filename = 'output/train_test/{}-{}.csv'.format('test_numeric', h)
-        print('exporting to: {}'.format(export_filename))
         rows.to_csv(export_filename)
+        print('.', end='', flush=True)
     del n_df
 
     d_df = pd.read_csv(filename.test_date_file, index_col=0, dtype=np.float32)
@@ -54,8 +54,8 @@ def export_all(hashes):
         ids = test_items_need_training[h]
         rows = d_df.loc[ids].dropna(axis=1)
         export_filename = 'output/train_test/{}-{}.csv'.format('test_date', h)
-        print('exporting to: {}'.format(export_filename))
         rows.to_csv(export_filename)
+        print('.', end='', flush=True)
     del d_df
 
     c_df = pd.read_csv(filename.test_categorical_file, index_col=0, dtype=str)
@@ -63,9 +63,9 @@ def export_all(hashes):
         ids = test_items_need_training[h]
         rows = c_df.loc[ids].dropna(axis=1)
         export_filename = 'output/train_test/{}-{}.csv'.format('test_categorical', h)
-        print('exporting to: {}'.format(export_filename))
         rows.to_csv(export_filename)
-    del d_df
+        print('.', end='', flush=True)
+    del c_df
 
 test_items_0 = load('test_items_0')
 test_items_1 = load('test_items_1')
