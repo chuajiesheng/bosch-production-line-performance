@@ -49,7 +49,7 @@ def export_all(hashes):
         rows.to_csv(export_filename)
     del n_df
 
-    d_df = pd.read_csv(filename.train_date_file, index_col=0, dtype=np.float32)
+    d_df = pd.read_csv(filename.test_date_file, index_col=0, dtype=np.float32)
     for h in hashes:
         ids = test_items_need_training[h]
         rows = d_df.loc[ids].dropna(axis=1)
@@ -58,7 +58,7 @@ def export_all(hashes):
         rows.to_csv(export_filename)
     del d_df
 
-    c_df = pd.read_csv(filename.train_categorical_file, index_col=0, dtype=str)
+    c_df = pd.read_csv(filename.test_categorical_file, index_col=0, dtype=str)
     for h in hashes:
         ids = test_items_need_training[h]
         rows = c_df.loc[ids].dropna(axis=1)
