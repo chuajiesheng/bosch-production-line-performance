@@ -19,7 +19,7 @@ def to_sha(s):
 
 
 def load(name):
-    print('Loading: {}'.format(name))
+    print('## Loading: {}'.format(name))
     d = None
     with open('output/unique_hash/{}.pickle'.format(name), 'rb') as f:
         d = pickle.load(f)
@@ -39,7 +39,7 @@ def get_X(h, cols):
 
     if c_df.shape[1] > 0:
         c_df = pd.get_dummies(c_df)
-        print('c_df: {}'.format(c_df.dtypes.index))
+        print('## c_df: {}'.format(c_df.dtypes.index))
 
     t_n_df = load_data(h, 'test_numeric', usecols=cols, dtype=np.float32)
     t_d_df = load_data(h, 'test_date', dtype=np.float32)
@@ -111,10 +111,10 @@ for h in intersection:
     mcc = np.array([matthews_corrcoef(y, preds > thr) for thr in thresholds])
     plt.plot(thresholds, mcc)
     best_threshold = thresholds[mcc.argmax()]
-    print('mcc.max: {}'.format(mcc.max()))
+    print('# mcc.max: {}'.format(mcc.max()))
 
     preds = (clf.predict_proba(test_X)[:, 1] > best_threshold).astype(np.int8)
-    print('preds: {}'.format(preds))
+    print('# preds: {}'.format(preds))
     with open('output/test_pred/{}.pickle'.format(h), 'wb') as f:
         pickle.dump(preds, f, pickle.HIGHEST_PROTOCOL)
 
