@@ -48,17 +48,32 @@ def get_X(h, cols):
     if t_c_df.shape[1] > 0:
         t_c_df = pd.get_dummies(t_c_df)
 
-    missing_columns = set(c_df.dtypes.index) - set(t_c_df.dtypes.index)
-    for c in missing_columns:
-        t_c_df[c] = 0
-    t_c_df.sort_index(axis=1)
+    n_df, t_n_df = fix_missing_columns(n_df, t_n_df)
+    d_df, t_d_df = fix_missing_columns(d_df, t_d_df)
+    c_df, t_c_df = fix_missing_columns(c_df, t_c_df)
 
-    missing_columns = set(t_c_df.dtypes.index) - set(c_df.dtypes.index)
-    for c in missing_columns:
-        c_df[c] = 0
-    c_df.sort_index(axis=1)
+    print('## Size of numeric features: {}, {}'.format(len(n_df.dtypes.index), len(t_n_df.dtypes.index)))
+    print('## Size of date features: {}, {}'.format(len(d_df.dtypes.index), len(t_d_df.dtypes.index)))
+    print('## Size of categorical features: {}, {}'.format(len(c_df.dtypes.index), len(t_c_df.dtypes.index)))
 
     return np.concatenate([n_df, d_df, c_df], axis=1), np.concatenate([t_n_df, t_d_df, t_c_df], axis=1)
+
+
+def fix_missing_columns(df, df2):
+    missing_columns = set(df.dtypes.index) - set(df2.dtypes.index)
+    print('### Placing missing columns in test: {}'.format(missing_columns))
+    for c in missing_columns:
+        df2[c] = 0
+    df2.sort_index(axis=1)
+
+    missing_columns = set(df2.dtypes.index) - set(df.dtypes.index)
+    print('### Placing missing columns in train: {}'.format(missing_columns))
+    for c in missing_columns:
+        df[c] = 0
+    df.sort_index(axis=1)
+
+    return df, df2
+
 
 test_items_0 = load('test_items_0')
 test_items_1 = load('test_items_1')
