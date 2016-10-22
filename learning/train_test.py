@@ -4,9 +4,7 @@ import hashlib
 import pickle
 import gc
 import csv
-from xgboost import XGBClassifier
-from sklearn.metrics import matthews_corrcoef, roc_auc_score
-from sklearn.cross_validation import cross_val_score, StratifiedKFold
+from sklearn import ensemble
 import matplotlib.pyplot as plt
 from utils import filename
 import code
@@ -102,40 +100,16 @@ for h in intersection:
 
     if X.shape[1] < 1:
         print('# Have nothing to train on. Skipping.')
+        preds = np.ones(y.shape[0])
+        with open('output/test_pred/{}.pickle'.format(h), 'wb') as f:
+            pickle.dump(preds, f, pickle.HIGHEST_PROTOCOL)
         continue
 
     base_score = float(y.sum()) / y.shape[0]
-    clf = XGBClassifier(base_score=base_score)
-    clf.fit(X, y)
+    svr = ensemble.AdaBoostClassifier()
+    svr.fit(X, y)
+    preds = svr.predict(test_X).astype(np.int8)
 
-    important_indices = np.where(clf.feature_importances_ > 0.0005)[0]
-    print('# important_indices: {}'.format(important_indices))
-
-    folds = 3
-    if y.shape[0] < folds:
-        folds = y.shape[0] - 1
-
-    clf = XGBClassifier(max_depth=20, base_score=0.005)
-    preds = np.ones(y.shape[0])
-
-    if folds == 1:
-        preds = clf.fit(X, y).predict_proba(X)[:, 1]
-    else:
-        cv = StratifiedKFold(y, n_folds=folds)
-        for i, (train, test) in enumerate(cv):
-            preds[test] = clf.fit(X[train], y[train]).predict_proba(X[test])[:, 1]
-            if y.sum() != y.shape[0] and pd.Series(y[test]).unique().shape[0] > 1:
-                print("# Fold {}, ROC AUC: {:.3f}".format(i, roc_auc_score(y[test], preds[test])))
-    print(roc_auc_score(y, preds))
-
-    # pick the best threshold out-of-fold
-    thresholds = np.linspace(0.01, 0.99, 50)
-    mcc = np.array([matthews_corrcoef(y, preds > thr) for thr in thresholds])
-    plt.plot(thresholds, mcc)
-    best_threshold = thresholds[mcc.argmax()]
-    print('# mcc.max: {}'.format(mcc.max()))
-
-    preds = (clf.predict_proba(test_X)[:, 1] > best_threshold).astype(np.int8)
     print('# preds: {}'.format(preds))
     with open('output/test_pred/{}.pickle'.format(h), 'wb') as f:
         pickle.dump(preds, f, pickle.HIGHEST_PROTOCOL)
