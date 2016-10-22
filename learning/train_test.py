@@ -98,27 +98,34 @@ for h in intersection:
 
     X, test_X = get_X(h, range(0, cols - 1))
     y = load_data(h, 'train_numeric', usecols=[0, cols - 1], dtype=np.float32).values.ravel()
-    print('y: {}'.format(y.shape))
+    print('# y: {}'.format(y.shape))
+
+    if X.shape[1] < 1:
+        print('# Have nothing to train on. Skipping.')
+        continue
 
     base_score = float(y.sum()) / y.shape[0]
     clf = XGBClassifier(base_score=base_score)
     clf.fit(X, y)
 
     important_indices = np.where(clf.feature_importances_ > 0.0005)[0]
-    print('important_indices: {}'.format(important_indices))
+    print('# important_indices: {}'.format(important_indices))
 
     folds = 3
     if y.shape[0] < folds:
-        folds = y.shape[0]
+        folds = y.shape[0] - 1
 
     clf = XGBClassifier(max_depth=20, base_score=0.005)
-    cv = StratifiedKFold(y, n_folds=folds)
-
     preds = np.ones(y.shape[0])
-    for i, (train, test) in enumerate(cv):
-        preds[test] = clf.fit(X[train], y[train]).predict_proba(X[test])[:, 1]
-        if y.sum() != y.shape[0] and pd.Series(y[test]).unique().shape[0] > 1:
-            print("Fold {}, ROC AUC: {:.3f}".format(i, roc_auc_score(y[test], preds[test])))
+
+    if folds == 1:
+        preds = clf.fit(X, y).predict_proba(X)[:, 1]
+    else:
+        cv = StratifiedKFold(y, n_folds=folds)
+        for i, (train, test) in enumerate(cv):
+            preds[test] = clf.fit(X[train], y[train]).predict_proba(X[test])[:, 1]
+            if y.sum() != y.shape[0] and pd.Series(y[test]).unique().shape[0] > 1:
+                print("# Fold {}, ROC AUC: {:.3f}".format(i, roc_auc_score(y[test], preds[test])))
     print(roc_auc_score(y, preds))
 
     # pick the best threshold out-of-fold
