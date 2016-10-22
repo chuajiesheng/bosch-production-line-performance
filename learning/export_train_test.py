@@ -1,6 +1,7 @@
 import numpy as np
 import pandas as pd
 import pickle
+import gc
 from utils import filename
 
 
@@ -21,6 +22,7 @@ def export_all(hashes):
         rows.to_csv(export_filename)
         print('.', end='', flush = True)
     del n_df
+    gc.collect()
 
     d_df = pd.read_csv(filename.train_date_file, index_col=0, dtype=np.float32)
     for h in hashes:
@@ -30,6 +32,7 @@ def export_all(hashes):
         rows.to_csv(export_filename)
         print('.', end='', flush=True)
     del d_df
+    gc.collect()
 
     c_df = pd.read_csv(filename.train_categorical_file, index_col=0, dtype=str)
     for h in hashes:
@@ -39,6 +42,7 @@ def export_all(hashes):
         rows.to_csv(export_filename)
         print('.', end='', flush=True)
     del c_df
+    gc.collect()
 
     n_df = pd.read_csv(filename.test_numeric_file, index_col=0, dtype=np.float32)
     for h in hashes:
@@ -48,6 +52,7 @@ def export_all(hashes):
         rows.to_csv(export_filename)
         print('.', end='', flush=True)
     del n_df
+    gc.collect()
 
     d_df = pd.read_csv(filename.test_date_file, index_col=0, dtype=np.float32)
     for h in hashes:
@@ -57,6 +62,7 @@ def export_all(hashes):
         rows.to_csv(export_filename)
         print('.', end='', flush=True)
     del d_df
+    gc.collect()
 
     c_df = pd.read_csv(filename.test_categorical_file, index_col=0, dtype=str)
     for h in hashes:
@@ -66,6 +72,7 @@ def export_all(hashes):
         rows.to_csv(export_filename)
         print('.', end='', flush=True)
     del c_df
+    gc.collect()
 
 test_items_0 = load('test_items_0')
 test_items_1 = load('test_items_1')
