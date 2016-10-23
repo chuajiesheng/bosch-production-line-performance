@@ -371,11 +371,17 @@ def Train():
     test_items_0 = load('test_items_0')
     test_items_1 = load('test_items_1')
 
+    differs_0 = 0
+    differs_1 = 0
     for i in test_items_0:
-        submission.ix[submission['Id'] == i, ['Response']].iloc[0, 0] = 0
+        if submission.ix[submission['Id'] == i, ['Response']].iloc[0, 0] != 0:
+            differs_0 += 1
 
     for i in test_items_1:
-        submission.ix[submission['Id'] == i, ['Response']].iloc[0, 0] = 1
+        if submission.ix[submission['Id'] == i, ['Response']].iloc[0, 0] != 1:
+            differs_1 += 1
+
+    print("{} of 0's and {} of 1's differs".format(differs_0, differs_1))
 
     submission[['Id', 'Response']].to_csv('xgbsubmission' + str(folds) + '.csv',
                                           index=False)
