@@ -5,7 +5,16 @@ import xgboost as xgb
 from sklearn.cross_validation import StratifiedKFold
 from sklearn.metrics import matthews_corrcoef
 from operator import itemgetter
+import pickle
+import code
 
+
+def load(name):
+    print('## Loading: {}'.format(name))
+    d = None
+    with open('output/unique_hash/{}.pickle'.format(name), 'rb') as f:
+        d = pickle.load(f)
+    return d
 
 # per raddar, all date features except for stations 24+25 are identical
 
@@ -358,9 +367,18 @@ def Train():
     y_pred = (testpredictions / folds > .08).astype(int)
     submission = pd.DataFrame({"Id": test.Id.values,
                                "Response": y_pred})
+
+    test_items_0 = load('test_items_0')
+    test_items_1 = load('test_items_1')
+
+    for i in test_items_0:
+        submission.ix[submission['Id'] == i, ['Response']].iloc[0, 0] = 0
+
+    for i in test_items_1:
+        submission.ix[submission['Id'] == i, ['Response']].iloc[0, 0] = 1
+
     submission[['Id', 'Response']].to_csv('xgbsubmission' + str(folds) + '.csv',
                                           index=False)
-
 
 if __name__ == "__main__":
     print('Started')
