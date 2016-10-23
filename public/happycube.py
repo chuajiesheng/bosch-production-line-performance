@@ -165,7 +165,9 @@ def LeaveOneOut(data1, data2, columnName, useLOO=False):
     grpCount = data1.groupby(columnName)['Response'].count().reset_index()
     grpOutcomes['cnt'] = grpCount.Response
     if (useLOO):
-        grpOutcomes = grpOutcomes[grpOutcomes.cnt > 1]
+        grpOutcomes = grpOutcomes[grpOutcomes.cnt > 10]
+    else:
+        grpOutcomes = grpOutcomes[grpOutcomes.cnt >= 10]
     grpOutcomes.drop('cnt', inplace=True, axis=1)
     outcomes = data2['Response'].values
     x = pd.merge(data2[[columnName, 'Response']], grpOutcomes,
