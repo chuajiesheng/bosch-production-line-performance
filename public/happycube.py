@@ -72,6 +72,7 @@ def get_mindate():
         df_mindate_chunk['mindate'] = chunk[features].min(axis=1).values
         df_mindate_chunk['maxdate'] = chunk[features].max(axis=1).values
         df_mindate_chunk['diff'] = df_mindate_chunk['maxdate'] - df_mindate_chunk['mindate']
+        df_mindate_chunk['diff_rev'] = df_mindate_chunk['mindate'] - df_mindate_chunk['maxdate']
 
         if subset is None:
             subset = df_mindate_chunk.copy()
@@ -91,6 +92,7 @@ def get_mindate():
         df_mindate_chunk['mindate'] = chunk[features].min(axis=1).values
         df_mindate_chunk['maxdate'] = chunk[features].max(axis=1).values
         df_mindate_chunk['diff'] = df_mindate_chunk['maxdate'] - df_mindate_chunk['mindate']
+        df_mindate_chunk['diff_rev'] = df_mindate_chunk['mindate'] - df_mindate_chunk['maxdate']
         subset = pd.concat([subset, df_mindate_chunk])
 
         del chunk
