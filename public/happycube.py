@@ -218,6 +218,7 @@ def GrabData():
              'L3_S33_F3855', 'L1_S24_F1604',
              'L3_S29_F3407', 'L3_S33_F3865',
              'L3_S38_F3952', 'L1_S24_F1723',
+             'L3_S33_F3859',
              'Response']]
     traindata = None
     testdata = None
@@ -292,7 +293,7 @@ def Train():
     features.remove('Response')
     features.remove('Id')
     print(features)
-    num_rounds = 50
+    num_rounds = 100
     params = {}
     params['objective'] = "binary:logistic"
     params['eta'] = 0.021
