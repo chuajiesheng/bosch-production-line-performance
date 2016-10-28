@@ -295,7 +295,7 @@ def Train():
     features.remove('Response')
     features.remove('Id')
     print(features)
-    num_rounds = 200
+    num_rounds = 100
     params = {}
     params['objective'] = "binary:logistic"
     params['eta'] = 0.021
