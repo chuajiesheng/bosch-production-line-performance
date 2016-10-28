@@ -2,6 +2,8 @@ import gc
 import numpy as np
 import pandas as pd
 import xgboost as xgb
+from xgboost import plot_tree
+import matplotlib.pyplot as plt
 from sklearn.cross_validation import StratifiedKFold
 from sklearn.metrics import matthews_corrcoef
 from operator import itemgetter
@@ -356,6 +358,10 @@ def Train():
                                             True)
     print(matthews_corrcoef(train.Response,
                             y_pred))
+
+    fig, ax = plt.subplots(1, 1)
+    plot_tree(clf, ax=ax)
+    fig.savefig('output/happycube.png', dpi=600)
 
     submission = pd.DataFrame({"Id": train.Id,
                                "Prediction": trainpredictions / folds,
