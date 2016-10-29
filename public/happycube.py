@@ -295,11 +295,11 @@ def Train():
     features.remove('Response')
     features.remove('Id')
     print(features)
-    num_rounds = 100
+    num_rounds = 200
     params = {}
     params['objective'] = "binary:logistic"
     params['eta'] = 0.021
-    params['max_depth'] = 7
+    params['max_depth'] = 9
     params['colsample_bytree'] = 0.82
     params['min_child_weight'] = 3
     params['base_score'] = 0.005
@@ -375,7 +375,7 @@ def Train():
                                "Response": testpredictions / folds})
     submission[['Id', 'Response']].to_csv('rawxgbsubmission' + str(folds) + '.csv',
                                           index=False)
-    y_pred = (testpredictions / folds > .3).astype(int)
+    y_pred = (testpredictions / folds > .35).astype(int)
     submission = pd.DataFrame({"Id": test.Id.values,
                                "Response": y_pred})
 
