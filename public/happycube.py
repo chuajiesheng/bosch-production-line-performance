@@ -375,7 +375,7 @@ def Train():
                                "Response": testpredictions / folds})
     submission[['Id', 'Response']].to_csv('rawxgbsubmission' + str(folds) + '.csv',
                                           index=False)
-    y_pred = (testpredictions / folds > .35).astype(int)
+    y_pred = (testpredictions / folds > .4).astype(int)
     submission = pd.DataFrame({"Id": test.Id.values,
                                "Response": y_pred})
 
