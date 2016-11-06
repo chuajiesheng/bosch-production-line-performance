@@ -101,17 +101,19 @@ def get_mindate():
     return subset
 
 
-df_mindate = get_mindate()
+df_min_maxdate = get_mindate()
+df_min_maxdate.sort_values(by=['mindate', 'Id'], inplace=True)
+df_min_maxdate['mindate_id_diff'] = df_min_maxdate.Id.diff()
+midr = np.full_like(df_min_maxdate.mindate_id_diff.values, np.nan)
+midr[0:-1] = -df_min_maxdate.mindate_id_diff.values[1:]
 
-df_mindate.sort_values(by=['mindate', 'Id'], inplace=True)
+df_min_maxdate['mindate_id_diff_reverse'] = midr
 
-df_mindate['mindate_id_diff'] = df_mindate.Id.diff()
-
-midr = np.full_like(df_mindate.mindate_id_diff.values, np.nan)
-midr[0:-1] = -df_mindate.mindate_id_diff.values[1:]
-
-df_mindate['mindate_id_diff_reverse'] = midr
-
+df_min_maxdate.sort_values(by=['maxdate', 'Id'], inplace=True)
+df_min_maxdate['maxdate_id_diff'] = df_min_maxdate.Id.diff()
+midr = np.full_like(df_min_maxdate.maxdate_id_diff.values, np.nan)
+midr[0:-1] = -df_min_maxdate.maxdate_id_diff.values[1:]
+df_min_maxdate['maxdate_id_diff_reverse'] = midr
 
 def mcc(tp, tn, fp, fn):
     sup = tp * tn - fp * fn
@@ -266,8 +268,8 @@ def GrabData():
         del subset
         gc.collect()
 
-    traindata = traindata.merge(df_mindate, on='Id')
-    testdata = testdata.merge(df_mindate, on='Id')
+    traindata = traindata.merge(df_min_maxdate, on='Id')
+    testdata = testdata.merge(df_min_maxdate, on='Id')
 
     testdata['Response'] = 0  # Add Dummy Value
     visibletraindata = traindata[::2]
